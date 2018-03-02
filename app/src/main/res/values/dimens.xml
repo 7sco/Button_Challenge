@@ -11,4 +11,6 @@
     <dimen name="textSize_mid">18sp</dimen>
     <dimen name="margin_five">5dp</dimen>
     <dimen name="margin_one">1dp</dimen>
+    <item name="visible" type="id"/>
+    <item name="masked" type="id"/>
 </resources>
