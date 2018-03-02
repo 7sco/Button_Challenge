@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.franciscoandrade.button_challenge.restApi.EndPointApi;
+import com.example.franciscoandrade.button_challenge.restApi.model.Constants;
 import com.example.franciscoandrade.button_challenge.restApi.model.RootObjectSendAmounts;
 import com.example.franciscoandrade.button_challenge.restApi.model.RootObjectTransfers;
 import com.example.franciscoandrade.button_challenge.restApi.model.RootObjectUser;
@@ -34,30 +35,30 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class TransferActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView historyContainer;
-    ArrayList<String> usersList;
-    Spinner usersSpinner;
-    ArrayAdapter<CharSequence> adapter;
-    ArrayList<RootObjectUser> myList;
-    String id;
-    Retrofit retrofit;
-    List<String> listTransferNumbers;
-    List<RootObjectTransfers> listTransfers;
-    RootObjectTransfers rootObjectTransfers;
-    Button btnTransfer, btnDelete;
-    TextInputEditText amountTransfer;
-    HashMap<String, String> listMap;
+    private TextView historyContainer;
+    private ArrayList<String> usersList;
+    private Spinner usersSpinner;
+    private ArrayAdapter<CharSequence> adapter;
+    private ArrayList<RootObjectUser> myList;
+    private String id;
+    private Retrofit retrofit;
+    private List<String> listTransferNumbers;
+    private List<RootObjectTransfers> listTransfers;
+    private RootObjectTransfers rootObjectTransfers;
+    private Button btnTransfer, btnDelete;
+    private TextInputEditText amountTransfer;
+    private HashMap<String, String> listMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transfer);
         showToolBar("", true);
-        historyContainer = (TextView) findViewById(R.id.historyContainer);
-        usersSpinner = (Spinner) findViewById(R.id.usersSpinner);
-        btnTransfer = (Button) findViewById(R.id.btnTransfer);
-        btnDelete = (Button) findViewById(R.id.btnDelete);
-        amountTransfer = (TextInputEditText) findViewById(R.id.amountTransfer);
+        historyContainer = findViewById(R.id.historyContainer);
+        usersSpinner = findViewById(R.id.usersSpinner);
+        btnTransfer = findViewById(R.id.btnTransfer);
+        btnDelete = findViewById(R.id.btnDelete);
+        amountTransfer = findViewById(R.id.amountTransfer);
         Bundle b = getIntent().getExtras();
         id = b.getString("id");
         if (null != b) {
@@ -101,7 +102,7 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
 
     private void retrofitUser() {
         retrofit = new Retrofit.Builder()
-                .baseUrl("https://fake-button.herokuapp.com/")
+                .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
@@ -139,7 +140,7 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnTransfer:
-                transferAmmounts();
+                transferAmounts();
                 break;
             case R.id.btnDelete:
                 deleteUser();
@@ -152,23 +153,23 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
 
     private void deleteUser() {
         EndPointApi service = retrofit.create(EndPointApi.class);
-        Call<ResponseBody> response = service.deleteUser(id, "cjm123");
+        Call<ResponseBody> response = service.deleteUser(id, Constants.CANDIDATE_CODE);
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.d("DELETE", "onResponse: " + response);
+//                Log.d("DELETE", "onResponse: " + response);
                 Toast.makeText(TransferActivity.this, "User Deleted", Toast.LENGTH_SHORT).show();
                 finish();
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d("FAILDELETE", "onFailure: " + t.getMessage());
+//                Log.d("FAILDELETE", "onFailure: " + t.getMessage());
             }
         });
     }
 
-    private void transferAmmounts() {
+    private void transferAmounts() {
         if (!TextUtils.isEmpty(amountTransfer.getText().toString()) && usersSpinner.getSelectedItem().toString() != null) {
             String idString = listMap.get(usersSpinner.getSelectedItem().toString());
             Integer id1 = Integer.parseInt(idString);
@@ -176,10 +177,15 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
             String amount = amountTransfer.getText().toString();
             sendAmounts(amount, id1);
         }
+
+        else {
+            Toast.makeText(this, "Can't Have empty fields", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void sendAmounts(final String amount, int id) {
-        RootObjectSendAmounts rootObjectSendAmounts = new RootObjectSendAmounts("cmj123", amount, id);
+        RootObjectSendAmounts rootObjectSendAmounts = new RootObjectSendAmounts(Constants.CANDIDATE_CODE, amount, id);
         EndPointApi service = retrofit.create(EndPointApi.class);
         Call<RootObjectSendAmounts> response = service.sendAmount(rootObjectSendAmounts);
         response.enqueue(new Callback<RootObjectSendAmounts>() {

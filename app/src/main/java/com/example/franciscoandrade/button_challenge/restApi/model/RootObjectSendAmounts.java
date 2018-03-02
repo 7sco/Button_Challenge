@@ -7,7 +7,7 @@ package com.example.franciscoandrade.button_challenge.restApi.model;
 public class RootObjectSendAmounts {
     private String candidate;
     private String amount;
-    private int  user_id;
+    private int user_id;
 
     public RootObjectSendAmounts(String candidate, String amount, int user_id) {
         this.candidate = candidate;

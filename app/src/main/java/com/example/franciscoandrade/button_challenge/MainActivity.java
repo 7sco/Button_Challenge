@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.franciscoandrade.button_challenge.restApi.EndPointApi;
+import com.example.franciscoandrade.button_challenge.restApi.model.Constants;
 import com.example.franciscoandrade.button_challenge.restApi.model.RootObjectUser;
 
 import java.util.ArrayList;
@@ -35,16 +36,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recyclerContainer = (RecyclerView) findViewById(R.id.recyclerContainer);
-        mainBtn = (Button) findViewById(R.id.mainBtn);
-        fragmentContainer = (LinearLayout) findViewById(R.id.fragmentContainer);
+        recyclerContainer = findViewById(R.id.recyclerContainer);
+        mainBtn = findViewById(R.id.mainBtn);
+        fragmentContainer = findViewById(R.id.fragmentContainer);
         usersAdapter = new UsersAdapter(this);
         recyclerContainer.setAdapter(usersAdapter);
         recyclerContainer.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerContainer.setLayoutManager(linearLayoutManager);
         recyclerContainer.setNestedScrollingEnabled(false);
-
         fragmentContainer.setVisibility(View.GONE);
         mainBtn.setOnClickListener(this);
         retrofitUser();
@@ -62,14 +62,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onRestart() {
         fragmentContainer.setVisibility(View.GONE);
-        Log.d("RESTART", "onRestart: ");
+        //Log.d("RESTART", "onRestart: ");
         usersAdapter.notifyDataSetChanged();
         super.onRestart();
     }
 
     private void retrofitUser() {
         retrofit = new Retrofit.Builder()
-                .baseUrl("https://fake-button.herokuapp.com/")
+                .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }

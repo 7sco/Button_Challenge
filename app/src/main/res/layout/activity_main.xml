@@ -1,75 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/backgroundDark"
+    android:orientation="vertical"
     tools:context="com.example.franciscoandrade.button_challenge.MainActivity">
 
-    <include layout="@layout/actionbar_toolbar"/>
+    <include layout="@layout/actionbar_toolbar" />
 
     <LinearLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:orientation="vertical">
-    </LinearLayout>
-
-
-
+        android:orientation="vertical"
+        android:visibility="gone"/>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/NoMargin"
         android:layout_weight="1">
 
         <LinearLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Users:"
+                android:layout_marginTop="@dimen/smallMargin"
+                android:text="@string/UsersTxt"
                 android:textAlignment="center"
-                android:textSize="20sp"
-                android:layout_marginTop="5dp"
                 android:textColor="@color/colorAccent"
-                />
-
+                android:textSize="@dimen/textSizeBig" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbarSize="3dp"
-                android:scrollbars="vertical"
                 android:scrollbarAlwaysDrawVerticalTrack="true"
-                />
+                android:scrollbarSize="@dimen/marginThree"
+                android:scrollbars="vertical" />
 
         </LinearLayout>
 
-
-
     </android.support.v4.widget.NestedScrollView>
-
 
     <Button
         android:id="@+id/mainBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:gravity="center"
         android:layout_gravity="center"
-        android:text="Create User "
+        android:layout_marginLeft="@dimen/marginTwenty"
+        android:layout_marginRight="@dimen/marginTwenty"
+        android:gravity="center"
+        android:text="@string/create_user"
         android:theme="@style/RaisedButtonDark" />
-
 
 </LinearLayout>

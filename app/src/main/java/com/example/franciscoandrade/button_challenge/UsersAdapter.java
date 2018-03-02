@@ -20,8 +20,8 @@ import java.util.List;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHolder> {
 
-    Context context;
-    List<RootObjectUser> listUsers;
+    private Context context;
+    private List<RootObjectUser> listUsers;
 
     public UsersAdapter(Context context) {
         this.context = context;
@@ -39,9 +39,10 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
         String name = listUsers.get(position).getName();
         String email = listUsers.get(position).getEmail();
         final String id = String.valueOf(listUsers.get(position).getId());
+        String idShow = "ID: " + id;
         holder.nameTV.setText(name);
         holder.emailTV.setText(email);
-        holder.idTV.setText("ID: " + id);
+        holder.idTV.setText(idShow);
         holder.transferTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +52,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
     }
 
 
-    public void getIntentData(String id) {
+    private void getIntentData(String id) {
         Intent view = new Intent(context, TransferActivity.class);
         view.putExtra("list", (Serializable) listUsers);
         view.putExtra("id", id);
@@ -70,14 +71,14 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
     }
 
     public class UsersViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTV, emailTV, idTV, transferTV;
+        private TextView nameTV, emailTV, idTV, transferTV;
 
         public UsersViewHolder(View itemView) {
             super(itemView);
-            nameTV = (TextView) itemView.findViewById(R.id.nameTV);
-            emailTV = (TextView) itemView.findViewById(R.id.emailTV);
-            idTV = (TextView) itemView.findViewById(R.id.idTV);
-            transferTV = (TextView) itemView.findViewById(R.id.transferTV);
+            nameTV = itemView.findViewById(R.id.nameTV);
+            emailTV = itemView.findViewById(R.id.emailTV);
+            idTV = itemView.findViewById(R.id.idTV);
+            transferTV = itemView.findViewById(R.id.transferTV);
         }
     }
 }

@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:focusableInTouchMode="true"
+    android:orientation="vertical"
     tools:context="com.example.franciscoandrade.button_challenge.TransferActivity">
 
-    <include layout="@layout/action_toolbar_transfer"/>
+    <include layout="@layout/action_toolbar_transfer" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="@dimen/marginTwenty"
+        android:layout_marginTop="@dimen/marginTwenty"
         android:orientation="horizontal">
 
         <android.support.design.widget.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
+            android:layout_width="@dimen/NoMargin"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="@dimen/marginTwenty"
+            android:layout_marginLeft="@dimen/marginTen"
+            android:layout_marginRight="@dimen/marginTen"
+            android:layout_weight="0.5"
 
             android:theme="@style/EditTextYellow">
 
@@ -32,27 +31,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:focusable="true"
-                android:inputType="numberDecimal"
                 android:focusableInTouchMode="true"
-                android:hint="Amount"/>
+                android:hint="@string/amount_text"
+                android:inputType="numberDecimal" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="20sp"
             android:layout_gravity="center"
-            android:text="TO"/>
+            android:gravity="center"
+            android:text="@string/to_text"
+            android:textSize="@dimen/textSizeBig" />
 
         <Spinner
             android:id="@+id/usersSpinner"
-            android:layout_width="0dp"
-            android:gravity="center"
+            android:layout_width="@dimen/NoMargin"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="0.5"
-            android:layout_height="wrap_content"
-            />
+            android:gravity="center" />
 
     </LinearLayout>
 
@@ -60,46 +58,44 @@
         android:id="@+id/btnTransfer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Transfer"
-        android:theme="@style/RaisedButtonDark"/>
+        android:text="@string/transfer_text"
+        android:theme="@style/RaisedButtonDark" />
 
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:background="@color/dark"/>
+        android:layout_marginBottom="@dimen/marginTwenty"
+        android:layout_marginLeft="@dimen/marginTen"
+        android:layout_marginRight="@dimen/marginTen"
+        android:layout_marginTop="@dimen/marginTwenty"
+        android:background="@color/dark" />
 
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Transfer History"
-
-        android:textAlignment="center"/>
-
+        android:text="@string/transfer_history"
+        android:textAlignment="center" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/NoMargin"
         android:layout_weight="1">
 
-    <TextView android:id="@+id/historyContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        />
+        <TextView
+            android:id="@+id/historyContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="@dimen/textSizeBig" />
     </ScrollView>
 
     <Button
         android:id="@+id/btnDelete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Delete User"
-        android:theme="@style/RaisedButtonDark"/>
+        android:text="@string/delete_user"
+        android:theme="@style/RaisedButtonDark" />
 
 </LinearLayout>

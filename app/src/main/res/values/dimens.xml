@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="NoMargin">0dp</dimen>
+    <dimen name="textSizeBig">20sp</dimen>
+    <dimen name="smallMargin">5dp</dimen>
+    <dimen name="marginThree">3dp</dimen>
+    <dimen name="marginTwenty">20dp</dimen>
+    <dimen name="marginTen">10dp</dimen>
+    <dimen name="margin_thirty">30dp</dimen>
+    <dimen name="margin_eight">8dp</dimen>
+    <dimen name="textSize_mid">18sp</dimen>
+    <dimen name="margin_five">5dp</dimen>
+    <dimen name="margin_one">1dp</dimen>
+</resources>

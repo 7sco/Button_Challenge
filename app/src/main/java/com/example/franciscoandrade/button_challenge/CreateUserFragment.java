@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.franciscoandrade.button_challenge.restApi.EndPointApi;
+import com.example.franciscoandrade.button_challenge.restApi.model.Constants;
 import com.example.franciscoandrade.button_challenge.restApi.model.RootObject;
 
 import retrofit2.Call;
@@ -37,22 +38,14 @@ public class CreateUserFragment extends Fragment {
     private MyCustomObjectListener em;
     private TextInputEditText emailRegister, nameRegister;
 
-    public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager =
-                (InputMethodManager) activity.getSystemService(
-                        Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(
-                activity.getCurrentFocus().getWindowToken(), 0);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_create_user, container, false);
-        fragmentContainer = (LinearLayout) v.findViewById(R.id.fragmentContainer);
-        btnfrag = (Button) v.findViewById(R.id.btnfrag);
-        emailRegister = (TextInputEditText) v.findViewById(R.id.emailRegister);
-        nameRegister = (TextInputEditText) v.findViewById(R.id.nameRegister);
+        fragmentContainer = v.findViewById(R.id.fragmentContainer);
+        btnfrag = v.findViewById(R.id.btnfrag);
+        emailRegister = v.findViewById(R.id.emailRegister);
+        nameRegister = v.findViewById(R.id.nameRegister);
         btnfrag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,22 +88,22 @@ public class CreateUserFragment extends Fragment {
 
     private void retrofitUser() {
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://fake-button.herokuapp.com/")
+                .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 
     public void registerUser(String name, String email) {
-        RootObject rootObject = new RootObject(name, email, "cjm123");
+        RootObject rootObject = new RootObject(name, email, Constants.CANDIDATE_CODE);
         EndPointApi service = retrofit.create(EndPointApi.class);
         Call<RootObject> response = service.createUser(rootObject);
         response.enqueue(new Callback<RootObject>() {
             @Override
             public void onResponse(Call<RootObject> call, Response<RootObject> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(v.getContext(), "Registered", Toast.LENGTH_SHORT).show();
                     hideSoftKeyboard(getActivity());
                     onDestroyView();
+                    Toast.makeText(v.getContext(), "Registered", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(v.getContext(), "User Already exist in DB", Toast.LENGTH_SHORT).show();
                     Log.d("EXIST", "onResponse: " + response.body());
@@ -124,4 +117,13 @@ public class CreateUserFragment extends Fragment {
             }
         });
     }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
 }

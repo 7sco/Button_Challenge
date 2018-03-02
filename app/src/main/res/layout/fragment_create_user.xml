@@ -2,36 +2,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_margin="10dp"
     android:background="@color/backgroundDark"
+    android:orientation="vertical"
     tools:context="com.example.franciscoandrade.button_challenge.CreateUserFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:layout_weight="0.8">
+        android:layout_height="wrap_content"
+        android:layout_weight="0.4"
+        android:gravity="center">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:src="@drawable/img_logo"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_thirty"
+            android:src="@drawable/img_logo" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_height="@dimen/NoMargin"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="@dimen/marginTwenty"
+            android:layout_marginLeft="@dimen/marginTen"
+            android:layout_marginRight="@dimen/marginTen"
             android:theme="@style/EditTextYellow">
 
             <android.support.design.widget.TextInputEditText
@@ -40,19 +40,17 @@
                 android:layout_height="match_parent"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:inputType="textPersonName"
-                android:hint="Name"/>
+                android:hint="@string/name_text"
+                android:inputType="textPersonName" />
 
         </android.support.design.widget.TextInputLayout>
-
-
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="@dimen/marginTwenty"
+            android:layout_marginLeft="@dimen/marginTen"
+            android:layout_marginRight="@dimen/marginTen"
             android:theme="@style/EditTextYellow">
 
             <android.support.design.widget.TextInputEditText
@@ -60,22 +58,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:focusable="true"
-                android:inputType="textEmailAddress"
                 android:focusableInTouchMode="true"
-                android:hint="Email"/>
+                android:hint="@string/email_text"
+                android:inputType="textEmailAddress" />
 
         </android.support.design.widget.TextInputLayout>
-
 
         <Button
             android:id="@+id/btnfrag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/RaisedButtonDark"
-            android:text="click"
-            />
+            android:text="@string/register_text"
+            android:theme="@style/RaisedButtonDark" />
     </LinearLayout>
-
-
 
 </LinearLayout>
