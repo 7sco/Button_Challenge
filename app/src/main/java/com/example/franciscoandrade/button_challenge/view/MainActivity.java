@@ -1,21 +1,21 @@
-package com.example.franciscoandrade.button_challenge;
+package com.example.franciscoandrade.button_challenge.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.example.franciscoandrade.button_challenge.controller.MyCustomObjectListener;
+import com.example.franciscoandrade.button_challenge.R;
+import com.example.franciscoandrade.button_challenge.controller.UsersAdapter;
 import com.example.franciscoandrade.button_challenge.restApi.EndPointApi;
 import com.example.franciscoandrade.button_challenge.restApi.model.Constants;
 import com.example.franciscoandrade.button_challenge.restApi.model.RootObjectUser;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,19 +25,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, MyCustomObjectListener {
 
     private Retrofit retrofit;
-    private RecyclerView recyclerContainer;
     private UsersAdapter usersAdapter;
     private List<RootObjectUser> listUsers;
-    private RootObjectUser rootObjectUser;
-    private Button mainBtn;
     private LinearLayout fragmentContainer;
 
+    /*
+     * Create Adapter and layout for  RecyclerView
+     * Create instance of retrofit
+     * method to connect with the network
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recyclerContainer = findViewById(R.id.recyclerContainer);
-        mainBtn = findViewById(R.id.mainBtn);
+        RecyclerView recyclerContainer = findViewById(R.id.recyclerContainer);
+        Button mainBtn = findViewById(R.id.mainBtn);
         fragmentContainer = findViewById(R.id.fragmentContainer);
         usersAdapter = new UsersAdapter(this);
         recyclerContainer.setAdapter(usersAdapter);
@@ -51,22 +53,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getListUsers();
     }
 
+
+    /*
+     * Method use to reload list on fragment close
+     */
     @Override
     protected void onResume() {
         super.onResume();
-        ///fragmentContainer.setVisibility(View.GONE);
-        Log.d("RESUME", "onResume: ");
         onRestart();
     }
 
+    /*
+     * Hide fragment container  onRestart view
+     */
     @Override
     protected void onRestart() {
         fragmentContainer.setVisibility(View.GONE);
-        //Log.d("RESTART", "onRestart: ");
         usersAdapter.notifyDataSetChanged();
         super.onRestart();
     }
 
+
+    /*
+     * Create retrofit instance to use on network petitions
+     */
     private void retrofitUser() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -74,7 +84,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .build();
     }
 
-    public void getListUsers() {
+
+    /*
+     * Clear list so data does not get added instead it cleans and adds new data
+     * A dd list response to list
+     * Send list to adapter to render in Recyclerview
+     */
+    private void getListUsers() {
         EndPointApi service = retrofit.create(EndPointApi.class);
         Call<List<RootObjectUser>> response = service.getUserList();
         response.enqueue(new Callback<List<RootObjectUser>>() {
@@ -86,9 +102,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     listUsers.clear();
                     listUsers.addAll(response.body());
                     usersAdapter.addUsers(listUsers);
-                    //Log.d("RESPONSE", "onResponse: "+response);
-                    // Log.d("RESPONSE", "onResponse: "+response.body());
-                    // Log.d("RESPONSE", "onResponse: "+response.body().get(0).getName());
                 }
             }
 
@@ -99,6 +112,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+
+    /*
+     * Handle click event on Register Button
+     * Inflate fragment
+     * Make fragment container visible
+     */
     @Override
     public void onClick(View v) {
         fragmentContainer.setVisibility(View.VISIBLE);
@@ -109,6 +128,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragmentTransaction1.commit();
     }
 
+
+    /*
+     * Listener allows to re-load list after new user is created
+     */
     @Override
     public void reloadView() {
         getListUsers();

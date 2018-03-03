@@ -1,4 +1,4 @@
-package com.example.franciscoandrade.button_challenge;
+package com.example.franciscoandrade.button_challenge.view;
 
 
 import android.app.Activity;
@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.franciscoandrade.button_challenge.controller.MyCustomObjectListener;
+import com.example.franciscoandrade.button_challenge.R;
 import com.example.franciscoandrade.button_challenge.restApi.EndPointApi;
 import com.example.franciscoandrade.button_challenge.restApi.model.Constants;
 import com.example.franciscoandrade.button_challenge.restApi.model.RootObject;
@@ -26,24 +28,22 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class CreateUserFragment extends Fragment {
     private View v;
     private Retrofit retrofit;
-    private LinearLayout fragmentContainer;
-    private Button btnfrag;
     private MyCustomObjectListener em;
     private TextInputEditText emailRegister, nameRegister;
 
+    /**
+     * Inflate fragment
+     * Set button click listener
+     * Creates retrofit instance on create
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_create_user, container, false);
-        fragmentContainer = v.findViewById(R.id.fragmentContainer);
-        btnfrag = v.findViewById(R.id.btnfrag);
+        Button btnfrag = v.findViewById(R.id.btnfrag);
         emailRegister = v.findViewById(R.id.emailRegister);
         nameRegister = v.findViewById(R.id.nameRegister);
         btnfrag.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +56,11 @@ public class CreateUserFragment extends Fragment {
         return v;
     }
 
+
+    /**
+     * Method checks if EdiText are not empty
+     * If ediText text can be take it sends data to registerUser method to take care of registration
+     */
     private void createUser() {
         if (TextUtils.isEmpty(nameRegister.getText().toString()) || TextUtils.isEmpty(emailRegister.getText().toString())) {
             if (TextUtils.isEmpty(nameRegister.getText().toString())) {
@@ -73,12 +78,21 @@ public class CreateUserFragment extends Fragment {
         }
     }
 
+
+    /**
+     *Add listener so it can work with the Main activity
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         em = (MyCustomObjectListener) context;
     }
 
+
+    /**
+     * When Fragment gets destroy it calls listener to reload data in the main view
+     * Removes Fragment from Stack
+     */
     @Override
     public void onDestroyView() {
         getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.fragmentContainer)).commit();
@@ -86,6 +100,10 @@ public class CreateUserFragment extends Fragment {
         super.onDestroyView();
     }
 
+
+    /**
+     * Retrofit Instance
+     */
     private void retrofitUser() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -93,7 +111,14 @@ public class CreateUserFragment extends Fragment {
                 .build();
     }
 
-    public void registerUser(String name, String email) {
+
+    /**
+     *Register User network call using @POST
+     * Method runs if EdiText are not empty
+     * Method accepts name, email to be registered with
+     * OnFail  runs when user with same name or password are already in the system
+     */
+    private void registerUser(String name, String email) {
         RootObject rootObject = new RootObject(name, email, Constants.CANDIDATE_CODE);
         EndPointApi service = retrofit.create(EndPointApi.class);
         Call<RootObject> response = service.createUser(rootObject);
@@ -106,7 +131,6 @@ public class CreateUserFragment extends Fragment {
                     Toast.makeText(v.getContext(), "Registered", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(v.getContext(), "User Already exist in DB", Toast.LENGTH_SHORT).show();
-                    Log.d("EXIST", "onResponse: " + response.body());
                 }
             }
 
@@ -118,7 +142,11 @@ public class CreateUserFragment extends Fragment {
         });
     }
 
-    public static void hideSoftKeyboard(Activity activity) {
+
+    /**
+     * Method Hides Soft keyboard if User has been registered into Button Database
+     */
+    private static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(
                         Activity.INPUT_METHOD_SERVICE);

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context="com.example.franciscoandrade.button_challenge.TransferActivity">
+    tools:context="com.example.franciscoandrade.button_challenge.view.TransferActivity">
 
     <include layout="@layout/action_toolbar_transfer" />
 

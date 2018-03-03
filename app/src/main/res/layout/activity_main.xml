@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundDark"
     android:orientation="vertical"
-    tools:context="com.example.franciscoandrade.button_challenge.MainActivity">
+    tools:context="com.example.franciscoandrade.button_challenge.view.MainActivity">
 
     <include layout="@layout/actionbar_toolbar" />
 

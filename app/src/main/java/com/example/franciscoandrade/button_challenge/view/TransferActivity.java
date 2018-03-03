@@ -1,4 +1,4 @@
-package com.example.franciscoandrade.button_challenge;
+package com.example.franciscoandrade.button_challenge.view;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -15,17 +15,15 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.example.franciscoandrade.button_challenge.R;
 import com.example.franciscoandrade.button_challenge.restApi.EndPointApi;
 import com.example.franciscoandrade.button_challenge.restApi.model.Constants;
 import com.example.franciscoandrade.button_challenge.restApi.model.RootObjectSendAmounts;
 import com.example.franciscoandrade.button_challenge.restApi.model.RootObjectTransfers;
 import com.example.franciscoandrade.button_challenge.restApi.model.RootObjectUser;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,17 +36,18 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
     private TextView historyContainer;
     private ArrayList<String> usersList;
     private Spinner usersSpinner;
-    private ArrayAdapter<CharSequence> adapter;
-    private ArrayList<RootObjectUser> myList;
     private String id;
     private Retrofit retrofit;
     private List<String> listTransferNumbers;
-    private List<RootObjectTransfers> listTransfers;
-    private RootObjectTransfers rootObjectTransfers;
-    private Button btnTransfer, btnDelete;
     private TextInputEditText amountTransfer;
     private HashMap<String, String> listMap;
 
+
+    /**
+     * On View created get data passed (id, and Serialized List)
+     * Add data to spinner
+     * Get Transfer data by doing network call
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,13 +55,29 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
         showToolBar("", true);
         historyContainer = findViewById(R.id.historyContainer);
         usersSpinner = findViewById(R.id.usersSpinner);
-        btnTransfer = findViewById(R.id.btnTransfer);
-        btnDelete = findViewById(R.id.btnDelete);
+        Button btnTransfer = findViewById(R.id.btnTransfer);
+        Button btnDelete = findViewById(R.id.btnDelete);
         amountTransfer = findViewById(R.id.amountTransfer);
+        getIntentData();
+        spinnerLoadData();
+        retrofitUser();
+        getTransfersData(id);
+        btnTransfer.setOnClickListener(this);
+        btnDelete.setOnClickListener(this);
+    }
+
+
+    /**
+     * Get Data from Intent Extras
+     * Setup List to be use in code
+     * Add data to new List and Map that can be accessed through out the code
+
+     */
+    private void getIntentData() {
         Bundle b = getIntent().getExtras();
         id = b.getString("id");
         if (null != b) {
-            myList = (ArrayList<RootObjectUser>) getIntent().getSerializableExtra("list");
+            ArrayList<RootObjectUser> myList = (ArrayList<RootObjectUser>) getIntent().getSerializableExtra("list");
             usersList = new ArrayList<>();
             listMap = new HashMap<>();
             for (RootObjectUser name : myList) {
@@ -72,19 +87,23 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
                 }
             }
         }
-        spinnerLoadData();
-        retrofitUser();
-        getTransfersData(id);
-        btnTransfer.setOnClickListener(this);
-        btnDelete.setOnClickListener(this);
     }
 
+
+    /**
+     * Load data users name passed by MainActivity into Spinner
+     */
     private void spinnerLoadData() {
-        adapter = new ArrayAdapter(this, R.layout.spinner_item, usersList);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this, R.layout.spinner_item, usersList);
         adapter.notifyDataSetChanged();
         usersSpinner.setAdapter(adapter);
     }
 
+
+    /**
+     * Show Custom Toolbar in view
+     * Pass Title to be shown in Toolbar
+     */
     @SuppressLint("ResourceType")
     private void showToolBar(String tittle, boolean upButton) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -94,12 +113,20 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
     }
 
+
+    /**
+     * Method to add functionality to Toolbar Back button
+     */
     @Override
     public boolean onSupportNavigateUp() {
         finish();
         return true;
     }
 
+
+    /*
+     * Create retrofit instance to use on network petitions
+     */
     private void retrofitUser() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -107,7 +134,12 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
                 .build();
     }
 
-    public void getTransfersData(String id) {
+
+    /**
+     * Network Call to obtain Transfer data by passing user ID
+     * Show outcome in Transfer History TextView
+     */
+    private void getTransfersData(String id) {
         EndPointApi service = retrofit.create(EndPointApi.class);
         Call<List<RootObjectTransfers>> response = service.getTransfers(id);
         response.enqueue(new Callback<List<RootObjectTransfers>>() {
@@ -132,10 +164,19 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
-    public void showHistory(List<String> list, String data) {
+
+    /**
+     * Show Transfer Data obtained to TextView
+     */
+    private void showHistory(List<String> list, String data) {
         historyContainer.setText(data);
     }
 
+
+    /**
+     * Handle click events to Transfer Money or Delete User
+     * On User deletion go back to Main Activity
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -151,6 +192,10 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+
+    /**
+     * Network Call @DELETE to delete user form Database
+     */
     private void deleteUser() {
         EndPointApi service = retrofit.create(EndPointApi.class);
         Call<ResponseBody> response = service.deleteUser(id, Constants.CANDIDATE_CODE);
@@ -169,6 +214,10 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
+
+    /**
+     * Get Amount to be Transfer and User before sending @POST request with amount to be transferred
+     */
     private void transferAmounts() {
         if (!TextUtils.isEmpty(amountTransfer.getText().toString()) && usersSpinner.getSelectedItem().toString() != null) {
             String idString = listMap.get(usersSpinner.getSelectedItem().toString());
@@ -184,6 +233,12 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+
+    /**
+     * Method receives amount and ID of User to whom the amount is being send
+     * Make Network Call @POST to transfer some amount
+     * Notify User amount was send
+     */
     private void sendAmounts(final String amount, int id) {
         RootObjectSendAmounts rootObjectSendAmounts = new RootObjectSendAmounts(Constants.CANDIDATE_CODE, amount, id);
         EndPointApi service = retrofit.create(EndPointApi.class);

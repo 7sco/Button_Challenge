@@ -5,7 +5,6 @@ package com.example.franciscoandrade.button_challenge.restApi.model;
  */
 
 public class Constants {
-
     public static final String CANDIDATE_CODE= "cjm123";
     public static final String BASE_URL = "https://fake-button.herokuapp.com/";
 }
