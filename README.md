@@ -16,3 +16,8 @@ Android App that exercises a REST-ful API, displays list of users taken from a D
 <img src="https://user-images.githubusercontent.com/21040125/36930854-33fd11e2-1e78-11e8-919e-fafbdd6ae145.png" width="200">
 <img src="https://user-images.githubusercontent.com/21040125/36930857-42c3095c-1e78-11e8-9247-c2498e90b983.png" width="200">
 </p>
+
+## Future Improvements
+
+* UI
+* Real time Update whn making a transfer or receiving a transfer
