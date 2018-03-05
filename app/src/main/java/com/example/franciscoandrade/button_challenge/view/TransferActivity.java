@@ -33,7 +33,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class TransferActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView historyContainer;
+    private TextView historyContainer, totalTransfer;
     private ArrayList<String> usersList;
     private Spinner usersSpinner;
     private String id;
@@ -54,6 +54,7 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_transfer);
         showToolBar("", true);
         historyContainer = findViewById(R.id.historyContainer);
+        totalTransfer = findViewById(R.id.totalTransfer);
         usersSpinner = findViewById(R.id.usersSpinner);
         Button btnTransfer = findViewById(R.id.btnTransfer);
         Button btnDelete = findViewById(R.id.btnDelete);
@@ -61,7 +62,7 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
         getIntentData();
         spinnerLoadData();
         retrofitUser();
-        getTransfersData(id);
+        getTransfersData(Integer.parseInt(id));
         btnTransfer.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
     }
@@ -139,27 +140,38 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
      * Network Call to obtain Transfer data by passing user ID
      * Show outcome in Transfer History TextView
      */
-    private void getTransfersData(String id) {
+    private void getTransfersData(int id) {
         EndPointApi service = retrofit.create(EndPointApi.class);
         Call<List<RootObjectTransfers>> response = service.getTransfers(id);
         response.enqueue(new Callback<List<RootObjectTransfers>>() {
             @Override
             public void onResponse(Call<List<RootObjectTransfers>> call, Response<List<RootObjectTransfers>> response) {
+                Log.d("response", "onResponse: "+response);
                 if (response.isSuccessful()) {
+
                     listTransferNumbers = new ArrayList<>();
                     String data = "";
+                    int total=0;
                     for (RootObjectTransfers num : response.body()) {
                         data += num.getAmount() + "\n";
-                        Log.d("amounts", "onResponse: " + num.getAmount());
                         listTransferNumbers.add(num.getAmount());
+                        try
+                        {
+                            total+= Integer.parseInt(num.getAmount());
+                        }
+                        catch(NumberFormatException ex)
+                        {
+                            total+=0;
+                        }
                     }
-                    showHistory(listTransferNumbers, data);
+                    showHistory(listTransferNumbers, data, total);
                 }
             }
 
             @Override
             public void onFailure(Call<List<RootObjectTransfers>> call, Throwable t) {
-
+                Toast.makeText(TransferActivity.this, "No Transfer History", Toast.LENGTH_SHORT).show();
+                showHistory(listTransferNumbers, "0", 0);
             }
         });
     }
@@ -168,8 +180,9 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
     /**
      * Show Transfer Data obtained to TextView
      */
-    private void showHistory(List<String> list, String data) {
+    private void showHistory(List<String> list, String data, int total) {
         historyContainer.setText(data);
+        totalTransfer.setText(String.valueOf(total));
     }
 
 
@@ -202,14 +215,12 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                Log.d("DELETE", "onResponse: " + response);
                 Toast.makeText(TransferActivity.this, "User Deleted", Toast.LENGTH_SHORT).show();
                 finish();
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                Log.d("FAILDELETE", "onFailure: " + t.getMessage());
             }
         });
     }
@@ -222,9 +233,9 @@ public class TransferActivity extends AppCompatActivity implements View.OnClickL
         if (!TextUtils.isEmpty(amountTransfer.getText().toString()) && usersSpinner.getSelectedItem().toString() != null) {
             String idString = listMap.get(usersSpinner.getSelectedItem().toString());
             Integer id1 = Integer.parseInt(idString);
-            Toast.makeText(this, "id #: " + id1, Toast.LENGTH_SHORT).show();
             String amount = amountTransfer.getText().toString();
             sendAmounts(amount, id1);
+            sendAmounts(("-"+amount), Integer.parseInt(id));
         }
 
         else {

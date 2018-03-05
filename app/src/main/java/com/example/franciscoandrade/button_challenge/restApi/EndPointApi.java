@@ -37,7 +37,7 @@ public interface EndPointApi {
      * Get list of Transfers
      */
     @GET("user/{id}/transfers?candidate=cjm123")
-    retrofit2.Call<List<RootObjectTransfers>> getTransfers(@Path("id")String id);
+    retrofit2.Call<List<RootObjectTransfers>> getTransfers(@Path("id")int id);
     //http://fake-button.herokuapp.com/user/2/transfers?candidate=cjm123
 
 

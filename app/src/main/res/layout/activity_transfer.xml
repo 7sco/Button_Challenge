@@ -12,6 +12,31 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="Current :"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="@dimen/marginTwenty"/>
+
+        <TextView
+            android:id="@+id/totalTransfer"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:textColor="@color/colorAccentLight"
+            android:text="100"
+            android:textSize="@dimen/sixty_textSize"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/marginTwenty"
         android:layout_marginTop="@dimen/marginTwenty"
         android:orientation="horizontal">
